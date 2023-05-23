@@ -1,6 +1,6 @@
 package controller
 
-type ValidateDocumentRequest struct {
+type AuthenticateDocumentRequest struct {
 	ID    int
 	URL   string
 	Title string

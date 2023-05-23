@@ -1,11 +1,8 @@
 package service
 
 import (
-	"errors"
 	"quest/model"
 	"quest/repository"
-
-	"gorm.io/gorm"
 )
 
 type CitizenService struct {
@@ -19,16 +16,7 @@ func NewCitizenService(citizenRepository *repository.CitizenRepository) *Citizen
 }
 
 func (cs *CitizenService) RegisterCitizen(citizen *model.Citizen) error {
-	switch cs.citizenRepository.CreateCitizen(citizen) {
-	case gorm.ErrRecordNotFound:
-		return errors.New("Mensaje de error #1")
-	case gorm.ErrInvalidField:
-		return errors.New("Mensaje de error #2")
-	case gorm.ErrDuplicatedKey:
-		return errors.New("Mensaje de error #3")
-	default:
-		return errors.New("Error no identificado")
-	}
+	return cs.citizenRepository.CreateCitizen(citizen)
 }
 
 func (cs *CitizenService) GetCitizen(id uint) (*model.Citizen, error) {
