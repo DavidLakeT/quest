@@ -16,7 +16,9 @@ type CitizenController struct {
 }
 
 func NewCitizenController(citizenService *service.CitizenService) *CitizenController {
-	return &CitizenController{citizenService: citizenService}
+	return &CitizenController{
+		citizenService: citizenService,
+	}
 }
 
 func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {

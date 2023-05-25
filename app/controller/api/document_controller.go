@@ -7,5 +7,7 @@ type DocumentController struct {
 }
 
 func NewDocumentController(documentService *service.DocumentService) *DocumentController {
-	return &DocumentController{documentService: documentService}
+	return &DocumentController{
+		documentService: documentService,
+	}
 }
