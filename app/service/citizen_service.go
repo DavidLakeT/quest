@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"quest/model"
 	"quest/repository"
 )
@@ -21,4 +22,23 @@ func (cs *CitizenService) RegisterCitizen(citizen *model.Citizen) error {
 
 func (cs *CitizenService) GetCitizen(id uint) (*model.Citizen, error) {
 	return cs.citizenRepository.GetCitizenByID(id)
+}
+
+func (cs *CitizenService) TransferCitizen(citizenID uint, currentOperatorID uint, newOperatorID uint) error {
+	citizen, err := cs.GetCitizen(citizenID)
+	if err != nil {
+		return err
+	}
+
+	if currentOperatorID == newOperatorID {
+		return errors.New("Current and New operator are the same.")
+	}
+
+	citizen.OperatorID = int(newOperatorID)
+	err = cs.citizenRepository.UpdateCitizen(citizen)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

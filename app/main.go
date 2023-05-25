@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"log"
+	"os"
 	controller "quest/controller/api"
 	"quest/repository"
 	"quest/routes"
@@ -9,7 +12,8 @@ import (
 	model "quest/model"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -17,9 +21,23 @@ import (
 
 func main() {
 
-	gormDb, err := gorm.Open(sqlite.Open("../database/carpetaciudadana.db"), &gorm.Config{})
+	envErr := godotenv.Load("config.env")
+	if envErr != nil {
+		log.Fatal(envErr)
+	}
+
+	connStr := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		os.Getenv("DBHost"),
+		os.Getenv("DBUser"),
+		os.Getenv("DBPassword"),
+		os.Getenv("DBName"),
+		os.Getenv("DBPort"),
+	)
+
+	gormDb, err := gorm.Open(postgres.New(postgres.Config{DSN: connStr}), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		log.Fatal(err)
 	}
 
 	gormDb.AutoMigrate(model.Citizen{})

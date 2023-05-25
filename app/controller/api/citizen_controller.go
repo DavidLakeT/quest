@@ -33,13 +33,12 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 	// Aquí debes agregar la verificación de los campos de la solicitud
 
 	citizen := model.Citizen{
-		ID:           uint(request.ID),
-		Name:         request.Name,
-		Address:      request.Address,
-		Email:        request.Email,
-		OperatorID:   request.OperatorID,
-		OperatorName: request.OperatorName,
-		Documents:    []model.Document{},
+		ID:         uint(request.ID),
+		Name:       request.Name,
+		Address:    request.Address,
+		Email:      request.Email,
+		OperatorID: request.OperatorID,
+		Documents:  []model.Document{},
 	}
 
 	err = cc.citizenService.RegisterCitizen(&citizen)
@@ -52,7 +51,6 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 }
 
 func (cc *CitizenController) ValidateCitizen(ctx *gin.Context) {
-
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
@@ -68,4 +66,23 @@ func (cc *CitizenController) ValidateCitizen(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, mapper.ToCitizenDTO(citizen))
+}
+
+func (cc *CitizenController) TransferCitizen(ctx *gin.Context) {
+	var request controller.TransferCitizenRequest
+
+	err := ctx.Bind(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	// Aquí debes agregar la verificación de los campos de la solicitud
+
+	err = cc.citizenService.TransferCitizen(request.CitizenID, request.CurrentOperatorID, request.NewOperatorID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
+	}
+
+	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "User succesfully transfered"})
 }

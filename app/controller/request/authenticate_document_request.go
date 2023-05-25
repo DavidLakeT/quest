@@ -1,7 +1,7 @@
 package controller
 
 type AuthenticateDocumentRequest struct {
-	ID    int
+	ID    uint
 	URL   string
 	Title string
 }
