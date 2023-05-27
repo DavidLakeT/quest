@@ -24,9 +24,9 @@ func (dr *DocumentRepository) GetDocumentById(id uint) (*model.Document, error) 
 	return &document, nil
 }
 
-func (dr *DocumentRepository) GetDocumentByTitle(name string) (*model.Document, error) {
+func (dr *DocumentRepository) GetDocumentByTitle(citizenID uint, name string) (*model.Document, error) {
 	var document model.Document
-	err := dr.db.Where("name = ?", name).First(&document).Error
+	err := dr.db.Where("citizen_id = ? AND name = ?", citizenID, name).First(&document).Error
 	if err != nil {
 		return nil, err
 	}
@@ -36,4 +36,8 @@ func (dr *DocumentRepository) GetDocumentByTitle(name string) (*model.Document, 
 
 func (dr *DocumentRepository) CreateDocument(document *model.Document) error {
 	return dr.db.Create(document).Error
+}
+
+func (dr *DocumentRepository) UpdateDocument(document *model.Document) error {
+	return dr.db.Save(document).Error
 }

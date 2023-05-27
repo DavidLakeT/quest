@@ -24,6 +24,10 @@ func (cs *CitizenService) GetCitizen(id uint) (*model.Citizen, error) {
 	return cs.citizenRepository.GetCitizenByID(id)
 }
 
+func (cs *CitizenService) GetCitizenDocuments(id uint) ([]*model.Document, error) {
+	return cs.citizenRepository.GetCitizenDocuments(id)
+}
+
 func (cs *CitizenService) TransferCitizen(citizenID uint, currentOperatorID uint, newOperatorID uint) error {
 	citizen, err := cs.GetCitizen(citizenID)
 	if err != nil {

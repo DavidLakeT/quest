@@ -48,8 +48,19 @@ func main() {
 	citizenService := service.NewCitizenService(citizenRepository)
 	citizenController := controller.NewCitizenController(citizenService)
 
+	documentRepository := repository.NewDocumentRepository(gormDb)
+	documentService := service.NewDocumentService(documentRepository)
+	documentController := controller.NewDocumentController(documentService)
+
+	operatorRepository := repository.NewOperatorRepository(gormDb)
+	operatorService := service.NewOperatorService(operatorRepository)
+	operatorController := controller.NewOperatorController(operatorService)
+
 	app := gin.Default()
 
 	routes.RegisterCitizenRoutes(app, citizenController)
+	routes.RegisterDocumentRoutes(app, documentController)
+	routes.RegisterOperatorRoutes(app, operatorController)
+
 	app.Run(":3000")
 }

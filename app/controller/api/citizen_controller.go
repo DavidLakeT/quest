@@ -47,7 +47,7 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "User successfully registered"})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Citizen successfully registered"})
 }
 
 func (cc *CitizenController) ValidateCitizen(ctx *gin.Context) {
@@ -82,7 +82,26 @@ func (cc *CitizenController) TransferCitizen(ctx *gin.Context) {
 	err = cc.citizenService.TransferCitizen(request.CitizenID, request.CurrentOperatorID, request.NewOperatorID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
+		return
 	}
 
-	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "User succesfully transfered"})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Citizen succesfully transfered"})
+}
+
+func (cc *CitizenController) GetCitizenDocuments(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	// Aquí debes agregar la verificación de los campos de la solicitud
+
+	documents, err := cc.citizenService.GetCitizenDocuments(uint(id))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, map[string]interface{}{"message": documents})
 }

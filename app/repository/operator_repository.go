@@ -33,3 +33,7 @@ func (or *OperatorRepository) GetOperatorByID(id uint) (*model.Operator, error) 
 
 	return &operator, nil
 }
+
+func (or *OperatorRepository) CreateOperator(operator *model.Operator) error {
+	return or.db.Create(operator).Error
+}

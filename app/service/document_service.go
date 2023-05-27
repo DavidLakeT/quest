@@ -29,8 +29,8 @@ func (ds *DocumentService) RegisterDocument(document *model.Document) error {
 	}
 }
 
-func (ds *DocumentService) GetDocument(title string) (*model.Document, error) {
-	document, err := ds.documentRepository.GetDocumentByTitle(title)
+func (ds *DocumentService) GetDocument(citizenID uint, name string) (*model.Document, error) {
+	document, err := ds.documentRepository.GetDocumentByTitle(citizenID, name)
 	if err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
@@ -45,4 +45,23 @@ func (ds *DocumentService) GetDocument(title string) (*model.Document, error) {
 	}
 
 	return document, nil
+}
+
+func (ds *DocumentService) AuthenticateDocument(citizenID uint, name string) error {
+	document, err := ds.documentRepository.GetDocumentByTitle(citizenID, name)
+	if err != nil {
+		return err
+	}
+
+	if document.Validated {
+		return errors.New("Document is already authenticated.")
+	}
+
+	document.Validated = true
+	err = ds.documentRepository.UpdateDocument(document)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
