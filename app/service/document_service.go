@@ -4,8 +4,6 @@ import (
 	"errors"
 	"quest/model"
 	"quest/repository"
-
-	"gorm.io/gorm"
 )
 
 type DocumentService struct {
@@ -19,29 +17,13 @@ func NewDocumentService(documentRepository *repository.DocumentRepository) *Docu
 }
 
 func (ds *DocumentService) RegisterDocument(document *model.Document) error {
-	switch ds.documentRepository.CreateDocument(document) {
-	case gorm.ErrInvalidField:
-		return errors.New("Mensaje de error #1")
-	case gorm.ErrDuplicatedKey:
-		return errors.New("Mensaje de error #2")
-	default:
-		return errors.New("Error no identificado")
-	}
+	return ds.documentRepository.CreateDocument(document)
 }
 
 func (ds *DocumentService) GetDocument(citizenID uint, name string) (*model.Document, error) {
 	document, err := ds.documentRepository.GetDocumentByTitle(citizenID, name)
 	if err != nil {
-		switch err {
-		case gorm.ErrRecordNotFound:
-			return nil, errors.New("Mensaje de error #1")
-		case gorm.ErrInvalidField:
-			return nil, errors.New("Mensaje de error #2")
-		case gorm.ErrDuplicatedKey:
-			return nil, errors.New("Mensaje de error #3")
-		default:
-			return nil, errors.New("Error no identificado")
-		}
+		return nil, err
 	}
 
 	return document, nil

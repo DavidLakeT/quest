@@ -8,6 +8,7 @@ import (
 
 type CitizenService struct {
 	citizenRepository *repository.CitizenRepository
+	operatorService   *OperatorService
 }
 
 func NewCitizenService(citizenRepository *repository.CitizenRepository) *CitizenService {
@@ -17,6 +18,11 @@ func NewCitizenService(citizenRepository *repository.CitizenRepository) *Citizen
 }
 
 func (cs *CitizenService) RegisterCitizen(citizen *model.Citizen) error {
+	_, err := cs.operatorService.GetOperator(citizen.OperatorID)
+	if err != nil {
+		return errors.New("Could not find an operator with that ID")
+	}
+
 	return cs.citizenRepository.CreateCitizen(citizen)
 }
 
@@ -38,7 +44,12 @@ func (cs *CitizenService) TransferCitizen(citizenID uint, currentOperatorID uint
 		return errors.New("Current and New operator are the same.")
 	}
 
-	citizen.OperatorID = int(newOperatorID)
+	_, err = cs.operatorService.GetOperator(citizen.OperatorID)
+	if err != nil {
+		return errors.New("Could not find an operator with the new operator ID")
+	}
+
+	citizen.OperatorID = newOperatorID
 	err = cs.citizenRepository.UpdateCitizen(citizen)
 	if err != nil {
 		return err

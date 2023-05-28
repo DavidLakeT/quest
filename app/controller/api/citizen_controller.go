@@ -6,9 +6,12 @@ import (
 	mapper "quest/dto/mapper"
 	"quest/model"
 	"quest/service"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type CitizenController struct {
@@ -26,7 +29,58 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 
 	err := ctx.Bind(&request)
 	if err != nil {
+		if validationErrs, ok := err.(validator.ValidationErrors); ok {
+			validationErrors := make(map[string]string)
+			for _, e := range validationErrs {
+				var errorMsg string
+
+				switch e.Field() {
+				case "id":
+					errorMsg = "Error validating id field"
+				case "name":
+					errorMsg = "Error validating name field"
+				case "address":
+					errorMsg = "Error validating address field"
+				case "email":
+					errorMsg = "Error validating email field"
+				case "operatorId":
+					errorMsg = "Error validating operatorId field"
+				case "documents":
+					errorMsg = "Error validating documents field"
+				default:
+					errorMsg = "Validation error"
+				}
+
+				validationErrors[e.Field()] = errorMsg
+			}
+
+			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": validationErrors})
+			return
+		}
+
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	if request.ID < 10000000 {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The ID must be at least 8 digits long"})
+		return
+	}
+
+	nameRegex := regexp.MustCompile(`^[a-zA-Z\s]+$`)
+	if !nameRegex.MatchString(strings.TrimSpace(request.Name)) || len(strings.TrimSpace(request.Name)) < 3 {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Name length must be larger than 3"})
+		return
+	}
+
+	if len(strings.TrimSpace(request.Address)) < 12 {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Address must be larger than 12 characters"})
+		return
+	}
+
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`)
+	if !emailRegex.MatchString(request.Email) {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid email format"})
 		return
 	}
 
@@ -37,7 +91,7 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 		Name:       request.Name,
 		Address:    request.Address,
 		Email:      request.Email,
-		OperatorID: request.OperatorID,
+		OperatorID: uint(request.OperatorID),
 		Documents:  []model.Document{},
 	}
 
@@ -103,5 +157,5 @@ func (cc *CitizenController) GetCitizenDocuments(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, map[string]interface{}{"message": documents})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"message": mapper.ToDocumentDTOArray(documents)})
 }

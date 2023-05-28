@@ -9,6 +9,6 @@ type Citizen struct {
 	Name       string
 	Address    string
 	Email      string
-	OperatorID int
+	OperatorID uint
 	Documents  []Document
 }

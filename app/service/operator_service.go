@@ -15,6 +15,10 @@ func NewOperatorService(operatorRepository *repository.OperatorRepository) *Oper
 	}
 }
 
+func (os *OperatorService) GetOperator(id uint) (*model.Operator, error) {
+	return os.operatorRepository.GetOperatorByID(id)
+}
+
 func (os *OperatorService) RegisterOperator(operator *model.Operator) error {
 	return os.operatorRepository.CreateOperator(operator)
 }

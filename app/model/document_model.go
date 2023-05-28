@@ -6,7 +6,7 @@ type Document struct {
 	gorm.Model
 
 	URL       string
-	Title     string `gorm:"unique;index"`
+	Title     string
 	Validated bool
 	CitizenID uint
 }
