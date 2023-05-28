@@ -62,7 +62,7 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 		return
 	}
 
-	if request.ID < 10000000 {
+	if request.CitizenID < 10000000 {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The ID must be at least 8 digits long"})
 		return
 	}
@@ -85,7 +85,7 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 	}
 
 	citizen := model.Citizen{
-		ID:         uint(request.ID),
+		ID:         uint(request.CitizenID),
 		Name:       request.Name,
 		Address:    request.Address,
 		Email:      request.Email,

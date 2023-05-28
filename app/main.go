@@ -44,23 +44,23 @@ func main() {
 	gormDb.AutoMigrate(model.Document{})
 	gormDb.AutoMigrate(model.Operator{})
 
+	operatorRepository := repository.NewOperatorRepository(gormDb)
+	operatorService := service.NewOperatorService(operatorRepository)
+	operatorController := controller.NewOperatorController(operatorService)
+
 	citizenRepository := repository.NewCitizenRepository(gormDb)
-	citizenService := service.NewCitizenService(citizenRepository)
+	citizenService := service.NewCitizenService(citizenRepository, operatorService)
 	citizenController := controller.NewCitizenController(citizenService)
 
 	documentRepository := repository.NewDocumentRepository(gormDb)
 	documentService := service.NewDocumentService(documentRepository)
 	documentController := controller.NewDocumentController(documentService)
 
-	operatorRepository := repository.NewOperatorRepository(gormDb)
-	operatorService := service.NewOperatorService(operatorRepository)
-	operatorController := controller.NewOperatorController(operatorService)
-
 	app := gin.Default()
 
+	routes.RegisterOperatorRoutes(app, operatorController)
 	routes.RegisterCitizenRoutes(app, citizenController)
 	routes.RegisterDocumentRoutes(app, documentController)
-	routes.RegisterOperatorRoutes(app, operatorController)
 
 	app.Run(":3000")
 }

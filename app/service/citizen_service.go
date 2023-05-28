@@ -11,9 +11,10 @@ type CitizenService struct {
 	operatorService   *OperatorService
 }
 
-func NewCitizenService(citizenRepository *repository.CitizenRepository) *CitizenService {
+func NewCitizenService(citizenRepository *repository.CitizenRepository, operatorService *OperatorService) *CitizenService {
 	return &CitizenService{
 		citizenRepository: citizenRepository,
+		operatorService:   operatorService,
 	}
 }
 
