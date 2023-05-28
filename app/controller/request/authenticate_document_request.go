@@ -1,7 +1,7 @@
 package controller
 
 type AuthenticateDocumentRequest struct {
-	CitizenID uint
-	URL       string
-	Name      string
+	CitizenID     uint   `json:"citizenId"`
+	DocumentUrl   string `json:"documentUrl"`
+	DocumentTitle string `json:"documentTitle"`
 }

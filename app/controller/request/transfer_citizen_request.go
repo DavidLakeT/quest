@@ -1,7 +1,7 @@
 package controller
 
 type TransferCitizenRequest struct {
-	CitizenID         uint `json:"citizenID"`
-	CurrentOperatorID uint `json:"currentOperatorID"`
-	NewOperatorID     uint `json:"newOperatorID"`
+	CitizenID         uint `json:"citizenId"`
+	CurrentOperatorID uint `json:"currentOperatorId"`
+	NewOperatorID     uint `json:"newOperatorId"`
 }

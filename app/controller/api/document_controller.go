@@ -100,9 +100,9 @@ func (dc *DocumentController) AuthenticateDocument(ctx *gin.Context) {
 				switch e.Field() {
 				case "citizenId":
 					errorMsg = "Error validating citizen id field"
-				case "url":
+				case "documentUrl":
 					errorMsg = "Error validating url field"
-				case "name":
+				case "documentTitle":
 					errorMsg = "Error validating name field"
 				default:
 					errorMsg = "Validation error"
@@ -125,18 +125,18 @@ func (dc *DocumentController) AuthenticateDocument(ctx *gin.Context) {
 	}
 
 	urlRegex := regexp.MustCompile(`/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/`)
-	if !urlRegex.MatchString(request.URL) {
+	if !urlRegex.MatchString(request.DocumentUrl) {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid url format"})
 		return
 	}
 
 	titleRegex := regexp.MustCompile(`^[^~)('!*<>:;,?"*|/]+$`)
-	if !titleRegex.MatchString(strings.TrimSpace(request.Name)) || len(strings.TrimSpace(request.Name)) < 5 {
+	if !titleRegex.MatchString(strings.TrimSpace(request.DocumentTitle)) || len(strings.TrimSpace(request.DocumentTitle)) < 5 {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Document title length must be larger than 5"})
 		return
 	}
 
-	err = dc.documentService.AuthenticateDocument(request.CitizenID, request.Name)
+	err = dc.documentService.AuthenticateDocument(request.CitizenID, request.DocumentTitle)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
 		return
