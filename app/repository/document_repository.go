@@ -26,7 +26,7 @@ func (dr *DocumentRepository) GetDocumentById(id uint) (*model.Document, error) 
 
 func (dr *DocumentRepository) GetDocumentByTitle(citizenID uint, name string) (*model.Document, error) {
 	var document model.Document
-	err := dr.db.Where("citizen_id = ? AND name = ?", citizenID, name).First(&document).Error
+	err := dr.db.Where("citizen_id = ? AND title = ?", citizenID, name).First(&document).Error
 	if err != nil {
 		return nil, err
 	}

@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 type DocumentController struct {
@@ -27,29 +26,6 @@ func (dc *DocumentController) UploadDocument(ctx *gin.Context) {
 
 	err := ctx.Bind(&request)
 	if err != nil {
-		if validationErrs, ok := err.(validator.ValidationErrors); ok {
-			validationErrors := make(map[string]string)
-			for _, e := range validationErrs {
-				var errorMsg string
-
-				switch e.Field() {
-				case "citizenId":
-					errorMsg = "Error validating citizen id field"
-				case "documentUrl":
-					errorMsg = "Error validating current docuemnt url field"
-				case "documentTitle":
-					errorMsg = "Error validating new document title field"
-				default:
-					errorMsg = "Validation error"
-				}
-
-				validationErrors[e.Field()] = errorMsg
-			}
-
-			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": validationErrors})
-			return
-		}
-
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
 		return
 	}
@@ -59,7 +35,7 @@ func (dc *DocumentController) UploadDocument(ctx *gin.Context) {
 		return
 	}
 
-	urlRegex := regexp.MustCompile(`/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/`)
+	urlRegex := regexp.MustCompile(`^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$`)
 	if !urlRegex.MatchString(request.DocumentUrl) {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid url format"})
 		return
@@ -92,29 +68,6 @@ func (dc *DocumentController) AuthenticateDocument(ctx *gin.Context) {
 
 	err := ctx.Bind(&request)
 	if err != nil {
-		if validationErrs, ok := err.(validator.ValidationErrors); ok {
-			validationErrors := make(map[string]string)
-			for _, e := range validationErrs {
-				var errorMsg string
-
-				switch e.Field() {
-				case "citizenId":
-					errorMsg = "Error validating citizen id field"
-				case "documentUrl":
-					errorMsg = "Error validating url field"
-				case "documentTitle":
-					errorMsg = "Error validating name field"
-				default:
-					errorMsg = "Validation error"
-				}
-
-				validationErrors[e.Field()] = errorMsg
-			}
-
-			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": validationErrors})
-			return
-		}
-
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
 		return
 	}
@@ -124,7 +77,7 @@ func (dc *DocumentController) AuthenticateDocument(ctx *gin.Context) {
 		return
 	}
 
-	urlRegex := regexp.MustCompile(`/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/`)
+	urlRegex := regexp.MustCompile(`^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$`)
 	if !urlRegex.MatchString(request.DocumentUrl) {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid url format"})
 		return

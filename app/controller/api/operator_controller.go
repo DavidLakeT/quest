@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 type OperatorController struct {
@@ -27,27 +26,6 @@ func (oc *OperatorController) RegisterOperator(ctx *gin.Context) {
 
 	err := ctx.Bind(&request)
 	if err != nil {
-		if validationErrs, ok := err.(validator.ValidationErrors); ok {
-			validationErrors := make(map[string]string)
-			for _, e := range validationErrs {
-				var errorMsg string
-
-				switch e.Field() {
-				case "name":
-					errorMsg = "Error validating operator name field"
-				case "operatorUrl":
-					errorMsg = "Error validating operator url field"
-				default:
-					errorMsg = "Validation error"
-				}
-
-				validationErrors[e.Field()] = errorMsg
-			}
-
-			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": validationErrors})
-			return
-		}
-
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
 		return
 	}
@@ -58,7 +36,7 @@ func (oc *OperatorController) RegisterOperator(ctx *gin.Context) {
 		return
 	}
 
-	urlRegex := regexp.MustCompile(`/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/`)
+	urlRegex := regexp.MustCompile(`^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$`)
 	if !urlRegex.MatchString(request.URL) {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid url format"})
 		return

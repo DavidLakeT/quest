@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 type CitizenController struct {
@@ -29,35 +28,6 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 
 	err := ctx.Bind(&request)
 	if err != nil {
-		if validationErrs, ok := err.(validator.ValidationErrors); ok {
-			validationErrors := make(map[string]string)
-			for _, e := range validationErrs {
-				var errorMsg string
-
-				switch e.Field() {
-				case "id":
-					errorMsg = "Error validating id field"
-				case "name":
-					errorMsg = "Error validating name field"
-				case "address":
-					errorMsg = "Error validating address field"
-				case "email":
-					errorMsg = "Error validating email field"
-				case "operatorId":
-					errorMsg = "Error validating operatorId field"
-				case "documents":
-					errorMsg = "Error validating documents field"
-				default:
-					errorMsg = "Validation error"
-				}
-
-				validationErrors[e.Field()] = errorMsg
-			}
-
-			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": validationErrors})
-			return
-		}
-
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
 		return
 	}
@@ -128,29 +98,6 @@ func (cc *CitizenController) TransferCitizen(ctx *gin.Context) {
 
 	err := ctx.Bind(&request)
 	if err != nil {
-		if validationErrs, ok := err.(validator.ValidationErrors); ok {
-			validationErrors := make(map[string]string)
-			for _, e := range validationErrs {
-				var errorMsg string
-
-				switch e.Field() {
-				case "citizenId":
-					errorMsg = "Error validating citizen id field"
-				case "currentOperatorId":
-					errorMsg = "Error validating current operator id field"
-				case "newOperatorId":
-					errorMsg = "Error validating new operator id field"
-				default:
-					errorMsg = "Validation error"
-				}
-
-				validationErrors[e.Field()] = errorMsg
-			}
-
-			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": validationErrors})
-			return
-		}
-
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
 		return
 	}
