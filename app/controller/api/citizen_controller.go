@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 type CitizenController struct {
@@ -29,40 +28,11 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 
 	err := ctx.Bind(&request)
 	if err != nil {
-		if validationErrs, ok := err.(validator.ValidationErrors); ok {
-			validationErrors := make(map[string]string)
-			for _, e := range validationErrs {
-				var errorMsg string
-
-				switch e.Field() {
-				case "id":
-					errorMsg = "Error validating id field"
-				case "name":
-					errorMsg = "Error validating name field"
-				case "address":
-					errorMsg = "Error validating address field"
-				case "email":
-					errorMsg = "Error validating email field"
-				case "operatorId":
-					errorMsg = "Error validating operatorId field"
-				case "documents":
-					errorMsg = "Error validating documents field"
-				default:
-					errorMsg = "Validation error"
-				}
-
-				validationErrors[e.Field()] = errorMsg
-			}
-
-			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": validationErrors})
-			return
-		}
-
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
 		return
 	}
 
-	if request.ID < 10000000 {
+	if request.CitizenID < 10000000 {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The ID must be at least 8 digits long"})
 		return
 	}
@@ -84,10 +54,8 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 		return
 	}
 
-	// Aquí debes agregar la verificación de los campos de la solicitud
-
 	citizen := model.Citizen{
-		ID:         uint(request.ID),
+		ID:         uint(request.CitizenID),
 		Name:       request.Name,
 		Address:    request.Address,
 		Email:      request.Email,
@@ -111,7 +79,10 @@ func (cc *CitizenController) ValidateCitizen(ctx *gin.Context) {
 		return
 	}
 
-	// Aquí debes agregar la verificación de los campos de la solicitud
+	if id < 10000000 {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The Citizen ID must be at least 8 digits long"})
+		return
+	}
 
 	citizen, err := cc.citizenService.GetCitizen(uint(id))
 	if err != nil {
@@ -131,7 +102,10 @@ func (cc *CitizenController) TransferCitizen(ctx *gin.Context) {
 		return
 	}
 
-	// Aquí debes agregar la verificación de los campos de la solicitud
+	if request.CitizenID < 10000000 {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The Citizen ID must be at least 8 digits long"})
+		return
+	}
 
 	err = cc.citizenService.TransferCitizen(request.CitizenID, request.CurrentOperatorID, request.NewOperatorID)
 	if err != nil {
@@ -149,7 +123,10 @@ func (cc *CitizenController) GetCitizenDocuments(ctx *gin.Context) {
 		return
 	}
 
-	// Aquí debes agregar la verificación de los campos de la solicitud
+	if id < 10000000 {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The Citizen ID must be at least 8 digits long"})
+		return
+	}
 
 	documents, err := cc.citizenService.GetCitizenDocuments(uint(id))
 	if err != nil {
