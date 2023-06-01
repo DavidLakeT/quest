@@ -61,3 +61,7 @@ func (ds *DocumentService) DeleteDocument(citizenID uint, title string) error {
 
 	return nil
 }
+
+func (ds *DocumentService) UpdateDocument(document *model.Document) error {
+	return ds.documentRepository.UpdateDocument(document)
+}

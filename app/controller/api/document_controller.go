@@ -115,3 +115,28 @@ func (dc *DocumentController) DeleteDocument(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Document succesfully deleted"})
 }
+
+func (dc *DocumentController) UpdateDocument(ctx *gin.Context) {
+	var request controller.UpdateDocumentRequest
+
+	err := ctx.Bind(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	document := &model.Document{
+		URL:       request.DocumentUrl,
+		Title:     request.DocumentTitle,
+		Validated: false,
+		CitizenID: request.CitizenID,
+	}
+
+	err = dc.documentService.UpdateDocument(document)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Document succesfully updated"})
+}

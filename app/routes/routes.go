@@ -21,6 +21,7 @@ func RegisterDocumentRoutes(ctx *gin.Engine, controller *controller.DocumentCont
 	apis := ctx.Group("/apis/document")
 
 	apis.POST("/uploadDocument", controller.UploadDocument)
+	apis.PUT("/updateDocument", controller.UpdateDocument)
 	apis.PATCH("/authenticateDocument", controller.AuthenticateDocument)
 	apis.DELETE("/deleteDocument", controller.DeleteDocument)
 }
