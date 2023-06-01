@@ -27,6 +27,19 @@ func (cs *CitizenService) RegisterCitizen(citizen *model.Citizen) error {
 	return cs.citizenRepository.CreateCitizen(citizen)
 }
 
+func (cs *CitizenService) UpdateCitizen(citizen *model.Citizen) error {
+	return cs.citizenRepository.UpdateCitizen(citizen)
+}
+
+func (cs *CitizenService) DeleteCitizen(id uint) error {
+	_, err := cs.citizenRepository.GetCitizenByID(id)
+	if err != nil {
+		return errors.New("Could not find a citizen with that ID")
+	}
+
+	return cs.DeleteCitizen(id)
+}
+
 func (cs *CitizenService) GetCitizen(id uint) (*model.Citizen, error) {
 	return cs.citizenRepository.GetCitizenByID(id)
 }

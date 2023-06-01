@@ -97,3 +97,21 @@ func (dc *DocumentController) AuthenticateDocument(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Document succesfully authenticated"})
 }
+
+func (dc *DocumentController) DeleteDocument(ctx *gin.Context) {
+	var request controller.DeleteDocumentRequest
+
+	err := ctx.Bind(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	err = dc.documentService.DeleteDocument(request.CitizenID, request.Title)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Document succesfully deleted"})
+}

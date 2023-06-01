@@ -72,6 +72,27 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Citizen successfully registered"})
 }
 
+func (cc *CitizenController) UpdateCitizen(ctx *gin.Context) {
+	var request controller.UpdateCitizenRequest
+
+	err := ctx.Bind(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	citizen := model.Citizen{
+		ID:         uint(request.CitizenID),
+		Name:       request.Name,
+		Address:    request.Address,
+		Email:      request.Email,
+		OperatorID: uint(request.OperatorID),
+		Documents:  []model.Document{},
+	}
+
+	cc.citizenService.UpdateCitizen(&citizen)
+}
+
 func (cc *CitizenController) ValidateCitizen(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -135,4 +156,20 @@ func (cc *CitizenController) GetCitizenDocuments(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, map[string]interface{}{"message": mapper.ToDocumentDTOArray(documents)})
+}
+
+func (cc *CitizenController) DeleteCitizen(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	err = cc.citizenService.DeleteCitizen(uint(id))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Citizen succesfully deleted"})
 }

@@ -52,6 +52,6 @@ func (cr *CitizenRepository) UpdateCitizen(citizen *model.Citizen) error {
 	return cr.db.Save(citizen).Error
 }
 
-func (cr *CitizenRepository) DeleteUser(citizen *model.Citizen) error {
+func (cr *CitizenRepository) DeleteCitizen(citizen *model.Citizen) error {
 	return cr.db.Delete(citizen).Error
 }

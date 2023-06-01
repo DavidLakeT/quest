@@ -10,6 +10,8 @@ func RegisterCitizenRoutes(ctx *gin.Engine, controller *controller.CitizenContro
 	apis := ctx.Group("/apis/citizen")
 
 	apis.POST("/registerCitizen", controller.RegisterCitizen)
+	apis.PUT("/updateCitizen", controller.UpdateCitizen)
+	apis.DELETE("/deleteCitizen", controller.DeleteCitizen)
 	apis.GET("/validateCitizen/:id", controller.ValidateCitizen)
 	apis.POST("/transferCitizen", controller.TransferCitizen)
 	apis.GET("/getCitizenDocuments/:id", controller.GetCitizenDocuments)
@@ -19,7 +21,8 @@ func RegisterDocumentRoutes(ctx *gin.Engine, controller *controller.DocumentCont
 	apis := ctx.Group("/apis/document")
 
 	apis.POST("/uploadDocument", controller.UploadDocument)
-	apis.POST("/authenticateDocument", controller.AuthenticateDocument)
+	apis.PATCH("/authenticateDocument", controller.AuthenticateDocument)
+	apis.DELETE("/deleteDocument", controller.DeleteDocument)
 }
 
 func RegisterOperatorRoutes(ctx *gin.Engine, controller *controller.OperatorController) {
