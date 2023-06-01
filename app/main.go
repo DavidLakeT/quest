@@ -62,5 +62,5 @@ func main() {
 	routes.RegisterCitizenRoutes(app, citizenController)
 	routes.RegisterDocumentRoutes(app, documentController)
 
-	app.Run(":3000")
+	app.Run(":3001")
 }
