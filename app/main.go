@@ -56,7 +56,7 @@ func main() {
 	documentService := service.NewDocumentService(documentRepository)
 	documentController := controller.NewDocumentController(documentService)
 
-	app := gin.Default()
+	app := gin.New()
 
 	routes.RegisterOperatorRoutes(app, operatorController)
 	routes.RegisterCitizenRoutes(app, citizenController)
