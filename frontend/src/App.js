@@ -7,7 +7,7 @@ import MyDocuments from './views/myDocuments/MyDocuments';
 import Uploads from './views/uploads/Uploads';
 import RequestDocument from './views/requestDocument/RequestDocument';
 import Transfer from './views/transfer/Transfer';
-
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -21,10 +21,9 @@ function App() {
           <Route path="/request" element={<RequestDocument />} />
           <Route path="/transfer" element={<Transfer />} />
        </Routes>
+       <ToastContainer />
     </div>
   );
 }
-
-
 
 export default App;

@@ -1,3 +1,32 @@
+#!/bin/bash
+
+set -xeuf -o pipefail
+
+if [[ -v CI ]]; then
+    SUDO=""
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+    echo "en_US UTF-8" > /etc/locale.gen
+else
+    SUDO="sudo"
+fi
+
+# Install Go
+${SUDO} apt update
+${SUDO} apt-get install -y curl tar
+${SUDO} apt-get update
+
+${SUDO} rm -rf /usr/local/go
+wget https://go.dev/dl/go1.20.4.linux-amd64.tar.gz
+${SUDO} tar -C /usr/local -xzf go1.20.4.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/profile
+echo 'export GOPATH=$HOME/go' >> /etc/profile
+echo 'export PATH=$PATH:$GOPATH/bin' >> /etc/profile
+source /etc/profile
+rm go1.20.4.linux-amd64.tar.gz
+
+sudo apt-get install -y postgresql-client
+
 # Install docker
 if ! type "docker" > /dev/null; then
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | ${SUDO} gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -25,3 +54,10 @@ if ! type "docker-compose" > /dev/null; then
 else
     echo 'docker-compose already installed'
 fi
+
+# Install NodeJS
+
+curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh
+${SUDO} bash nodesource_setup.sh
+${SUDO} apt-get install nodejs
+rm -f nodesource_setup.sh
