@@ -18,7 +18,7 @@ ${SUDO} apt-get update
 
 ${SUDO} rm -rf /usr/local/go
 wget https://go.dev/dl/go1.20.4.linux-amd64.tar.gz
-${SUDO} tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz
+${SUDO} tar -C /usr/local -xzf go1.20.4.linux-amd64.tar.gz
 echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/profile
 echo 'export GOPATH=$HOME/go' >> /etc/profile
 echo 'export PATH=$PATH:$GOPATH/bin' >> /etc/profile
