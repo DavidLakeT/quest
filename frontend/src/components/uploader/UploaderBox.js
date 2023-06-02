@@ -37,9 +37,3 @@ function UploaderBox(){
         </div>
     )
 }
-
-export default UploaderBox;
-
-
-
-
