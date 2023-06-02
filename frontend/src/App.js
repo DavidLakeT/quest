@@ -6,6 +6,7 @@ import Register from './views/register/Register';
 import MyDocuments from './views/myDocuments/MyDocuments';
 import Uploads from './views/uploads/Uploads';
 import RequestDocument from './views/requestDocument/RequestDocument';
+import Transfer from './views/transfer/Transfer';
 
 
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/documents" element={<MyDocuments />} />
           <Route path="/upload" element={<Uploads />} />
           <Route path="/request" element={<RequestDocument />} />
+          <Route path="/transfer" element={<Transfer />} />
        </Routes>
     </div>
   );

@@ -4,8 +4,11 @@ export const registerCitizen = async (citizenData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/registerCitizen`, {
       method: 'POST',
+      mode: 'no-cors',
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST,GET,OPTIONS',
       },
       body: JSON.stringify(citizenData)
     });
@@ -16,6 +19,30 @@ export const registerCitizen = async (citizenData) => {
 
     const createdCitizen = await response.json();
     return createdCitizen;
+  } catch (error) {
+    throw new Error('Error al crear ciudadano');
+  }
+};
+
+export const transferCitizen = async (transferData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/transferCitizen`, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST,GET,OPTIONS',
+      },
+      body: JSON.stringify(transferData)
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al crear ciudadano');
+    }
+
+    const transfer = await response.json();
+    return transfer;
   } catch (error) {
     throw new Error('Error al crear ciudadano');
   }

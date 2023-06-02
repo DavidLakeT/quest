@@ -2,48 +2,64 @@ import { Button, Grid, TextField } from '@mui/material';
 import AppBar from '../../components/appBar/Appbar';
 import { NavLink } from "react-router-dom";
 import { registerCitizen } from '../../services/citizenServices/CitizenServices';
+import React, { useState } from 'react';
 
-const handleRegisterClick = async () => {
+function Register() {
+  const [id, setId] = useState('');
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [email, setEmail] = useState('');
+  const [operatorId, setOperatorId] = useState('');
+
+  const handleRegisterClick = async () => {
     try {
       const citizenData = {
-        citizenId: 123456789,
-        name: "Jacobo",
-        address: "Envigadoooooooooo",
-        email: "jacobo@eafit.edu.co",
-        operatorid: 1
+        citizenId: id,
+        name: name,
+        address: address,
+        email: email,
+        operatorid: operatorId
       }
-
       const createdCitizen = await registerCitizen(citizenData);
       console.log('Ciudadano creado:', createdCitizen);
 
-      // Realiza cualquier acción adicional después de crear el ciudadano, como mostrar un mensaje de éxito, redirigir a otra página, etc.
+      setId('')
+      setName('')
+      setAddress('')
+      setEmail('')
+      setOperatorId('')
+
     } catch (error) {
       console.error('Error al crear ciudadano:', error.message);
 
-      // Realiza cualquier acción adicional en caso de error, como mostrar un mensaje de error al usuario.
     }
   };
 
-function Register() {
   return (
     <AppBar>
       <h1>Register</h1>
       <Grid container display="row" justifyContent="center" gap={2}>
         <Grid item xs={12} sm={12} md={12}>
-        <TextField type="text" placeholder='Id'/>
+        <TextField type="text" placeholder='Id'  value={id} onChange={(event) => setId(parseInt(event.target.value))}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-        <TextField type="text" placeholder='Usuario'/>
+        <TextField type="text" placeholder='Name'  value={name} onChange={(event) => setName(event.target.value)}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-        <TextField type="text" placeholder='Password'/>
+        <TextField type="text" placeholder='Address'  value={address} onChange={(event) => setAddress(event.target.value)}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-        <Button variant='contained' onClick={handleRegisterClick}>Registrar usuario</Button>
+        <TextField type="text" placeholder='email'  value={email} onChange={(event) => setEmail(event.target.value)}/>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+        <TextField type="text" placeholder='Operator Id'  value={operatorId} onChange={(event) => setOperatorId(parseInt(event.target.value))}/>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+        <Button variant='contained' onClick={handleRegisterClick}>Register citizen</Button>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
                 <NavLink to="/login">
-                    LogIn
+                    Login
                 </NavLink>
         </Grid>
       </Grid>
