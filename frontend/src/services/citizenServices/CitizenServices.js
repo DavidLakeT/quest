@@ -70,21 +70,44 @@ export const citizenLogin = async (citizenData) => {
 
 export const citizenDocuments = async (citizenId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/getCitizenDocuments/${citizenId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      //body: JSON.stringify(citizenData)
-    });
+    console.log(citizenId)
+  const response = await fetch(`${API_BASE_URL}/getCitizenDocuments/${citizenId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+  }});
 
     if (!response.ok) {
+      throw new Error('Error al realizar la solicitud');
+    }
+
+    const data = await response.json();
+    console.log(data.message);
+    return data
+  } catch (error) {
+    console.error('Error al obtener los documentos del ciudadano:', error);
+    throw error;
+  }
+  /*
+      .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al realizar la solicitud');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Hacer algo con los datos recibidos en la respuesta
+      console.log(data.message);
+      return data.message
+    })*/
+    // Manejar el error en caso de que ocurra
+    /*if (!response.ok) {
       throw new Error('Error');
     }
 
     const documents = await response.json();
-    return documents;
-  } catch (error) {
+    return documents;*/
+  /*} catch (error) {
     throw new Error('Error al crear ciudadano');
-  }
+  }*/
 };

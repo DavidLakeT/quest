@@ -1,27 +1,18 @@
-/*import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 import AppBar from '../../components/appBar/Appbar';
-import { NavLink } from "react-router-dom";
-import { registerCitizen } from '../../services/citizenServices/CitizenServices';
 import React, { useState } from 'react';
+import { citizenDocuments } from '../../services/citizenServices/CitizenServices';
 
 function Documents() {
-  /*const handleRegisterClick = async () => {
+  const [id, setId] = useState('');
+  const [documents, setDocuments] = useState([]);
+  const handleDocumentClick = async () => {
     try {
-      const citizenData = {
-        citizenId: id,
-        name: name,
-        address: address,
-        email: email,
-        operatorid: operatorId
-      }
-      const createdCitizen = await registerCitizen(citizenData);
-      console.log('Ciudadano creado:', createdCitizen);
+      const documents = await citizenDocuments(id);
+      console.log('Documents ', documents.message);
+      setDocuments(documents.message)
 
       setId('')
-      setName('')
-      setAddress('')
-      setEmail('')
-      setOperatorId('')
 
     } catch (error) {
       console.error('Error al crear ciudadano:', error.message);
@@ -31,34 +22,29 @@ function Documents() {
 
   return (
     <AppBar>
-    </AppBar>
-  );
-}
-
-      <h1>Register</h1>
+      <h1>Documents</h1>
       <Grid container display="row" justifyContent="center" gap={2}>
         <Grid item xs={12} sm={12} md={12}>
         <TextField type="text" placeholder='Id'  value={id} onChange={(event) => setId(parseInt(event.target.value))}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-        <TextField type="text" placeholder='Name'  value={name} onChange={(event) => setName(event.target.value)}/>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12}>
-        <TextField type="text" placeholder='Address'  value={address} onChange={(event) => setAddress(event.target.value)}/>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12}>
-        <TextField type="text" placeholder='email'  value={email} onChange={(event) => setEmail(event.target.value)}/>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12}>
-        <TextField type="text" placeholder='Operator Id'  value={operatorId} onChange={(event) => setOperatorId(parseInt(event.target.value))}/>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12}>
-        <Button variant='contained' onClick={handleRegisterClick}>Register citizen</Button>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12}>
-                <NavLink to="/login">
-                    Login
-                </NavLink>
+        <Button variant='contained' onClick={handleDocumentClick}>Search documents</Button>
         </Grid>
       </Grid>
-export default Documents;*/
+      <div>
+        <h2>Documents List:</h2>
+        <ul style={{ textAlign: 'center' }}>
+        {documents.map((document, index) => (
+          <li key={index}>
+            <a href={document.URL} target="_blank" rel="noopener noreferrer">
+              {document.Title}
+            </a>
+          </li>
+        ))}
+      </ul>
+      </div>
+    </AppBar>
+  );
+}
+
+export default Documents;

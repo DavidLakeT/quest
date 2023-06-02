@@ -34,7 +34,7 @@ function Login() {
         <TextField type="text" placeholder='Id'  value={id} onChange={(event) => setId(parseInt(event.target.value))}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-        <TextField type="text" placeholder='Password'  value={password} onChange={(event) => setId(event.target.value)}/>
+        <TextField type="password" placeholder='Password'  value={password} onChange={(event) => setId(event.target.value)}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
             <Button variant='contained' onClick={handleLoginClick}>Login</Button>
