@@ -74,7 +74,7 @@ func main() {
 
 	routes.RegisterOperatorRoutes(app, operatorController)
 	routes.RegisterCitizenRoutes(app, citizenController)
-	routes.RegisterDocumentRoutes(app, documentController)
+	routes.RegisterDocumentRoutes(app, documentController, citizenController)
 
 	app.Run(":3000")
 }

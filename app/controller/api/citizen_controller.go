@@ -4,6 +4,7 @@ import (
 	"net/http"
 	controller "quest/controller/request"
 	mapper "quest/dto/mapper"
+	"quest/encryption"
 	"quest/model"
 	"quest/service"
 	"regexp"
@@ -172,4 +173,44 @@ func (cc *CitizenController) DeleteCitizen(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, map[string]interface{}{"message": "Citizen succesfully deleted"})
+}
+
+func (cc *CitizenController) LoginCitizen(ctx *gin.Context) {
+	auth := controller.LoginRequest{}
+	if err := ctx.ShouldBindJSON(&auth); err != nil {
+		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
+		return
+	}
+	err, authorize := cc.citizenService.LoginCitizen(auth.CitizenID, auth.Password)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
+		return
+	}
+	if !authorize {
+		ctx.JSON(http.StatusUnauthorized, nil)
+		return
+	}
+	token, err := encryption.SignedLoginToken(auth.CitizenID)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, map[string]interface{}{"error": err.Error()})
+		return
+	}
+	ctx.SetCookie("auth", token, 90, "", "", false, false)
+	ctx.JSON(http.StatusAccepted, nil)
+}
+
+func (cc *CitizenController) CheckAuth(ctx *gin.Context) {
+	token, err := ctx.Cookie("auth")
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, nil)
+		ctx.Abort()
+		return
+	}
+	valid, err := encryption.CheckSignedToken(token)
+	if err != nil || !valid {
+		ctx.JSON(http.StatusUnauthorized, nil)
+		ctx.Abort()
+		return
+	}
+	ctx.Next()
 }

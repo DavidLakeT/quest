@@ -55,3 +55,15 @@ func (cr *CitizenRepository) UpdateCitizen(citizen *model.Citizen) error {
 func (cr *CitizenRepository) DeleteCitizen(citizen *model.Citizen) error {
 	return cr.db.Delete(citizen).Error
 }
+
+func (cr *CitizenRepository) LoginCitizen(citizenID uint, password string) (error, bool) {
+	var citizen *model.Citizen
+	err := cr.db.Where("id = ? and password = ?", citizenID, password).Find(&citizen).Error
+	if err != nil {
+		return err, false
+	}
+	if citizen.ID == 0 {
+		return nil, false
+	}
+	return nil, true
+}

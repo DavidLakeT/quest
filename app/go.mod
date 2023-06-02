@@ -6,6 +6,7 @@ require gorm.io/driver/postgres v1.5.2
 
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/mattn/go-sqlite3 v1.14.16 // indirect

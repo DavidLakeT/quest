@@ -71,3 +71,7 @@ func (cs *CitizenService) TransferCitizen(citizenID uint, currentOperatorID uint
 
 	return nil
 }
+
+func (cc *CitizenService) LoginCitizen(citizenID uint, password string) (error, bool) {
+	return cc.citizenRepository.LoginCitizen(citizenID, password)
+}
