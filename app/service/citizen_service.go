@@ -23,7 +23,10 @@ func (cs *CitizenService) RegisterCitizen(citizen *model.Citizen) error {
 	if err != nil {
 		return errors.New("Could not find an operator with that ID")
 	}
-
+	err = cs.citizenRepository.CreateCitizenOnAPI(citizen)
+	if err != nil {
+		return err
+	}
 	return cs.citizenRepository.CreateCitizen(citizen)
 }
 

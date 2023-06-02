@@ -1,9 +1,18 @@
 package repository
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"io"
+	"net/http"
 	"quest/model"
 
 	"gorm.io/gorm"
+)
+
+const (
+	urlAPI = "http://169.51.195.62:30174"
 )
 
 type CitizenRepository struct {
@@ -66,4 +75,32 @@ func (cr *CitizenRepository) LoginCitizen(citizenID uint, password string) (erro
 		return nil, false
 	}
 	return nil, true
+}
+
+func (cr *CitizenRepository) CreateCitizenOnAPI(citizen *model.Citizen) error {
+	data := struct {
+		Id           uint   `json:"id"`
+		Name         string `json:"name"`
+		Address      string `json:"address"`
+		Email        string `json:"email"`
+		OperatorId   uint   `json:"operatorId"`
+		OperatorName string `json:"operatorName"`
+	}{
+		Id:           citizen.ID,
+		Name:         citizen.Name,
+		Address:      citizen.Address,
+		Email:        citizen.Email,
+		OperatorId:   citizen.OperatorID,
+		OperatorName: "test operator",
+	}
+	rawData, _ := json.Marshal(data)
+	res, err := http.Post(urlAPI+"/apis/registerCitizen", "application/json", bytes.NewReader(rawData))
+	if err != nil {
+		return err
+	}
+	if res.StatusCode != 201 {
+		body, _ := io.ReadAll(res.Body)
+		return errors.New(string(body))
+	}
+	return nil
 }
