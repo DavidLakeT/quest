@@ -54,12 +54,13 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid email format"})
 		return
 	}
-
-	passwordRegex := regexp.MustCompile(`^(?=.*\d).{7,}$`)
-	if !passwordRegex.MatchString(request.Password) {
-		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid password format (+7 characters, 1 number)"})
-		return
-	}
+	/*
+		passwordRegex := regexp.MustCompile(`^(?=.*\d).{7,}$`)
+		if !passwordRegex.MatchString(request.Password) {
+			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid password format (+7 characters, 1 number)"})
+			return
+		}
+	*/
 
 	citizen := model.Citizen{
 		ID:         uint(request.CitizenID),

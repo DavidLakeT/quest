@@ -49,15 +49,41 @@ export const citizenLogin = async (citizenData) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(citizenData)
+      body: JSON.stringify(citizenData),
+      //credentials: 'include'
     });
 
     if (!response.ok) {
       throw new Error('Error');
     }
 
-    const login = await response.json();
+    const login = await response
+
+    const cookie = response.headers.get('Set-Cookie');
+
+    document.cookie = cookie;
     return login;
+  } catch (error) {
+    throw new Error('Error al crear ciudadano');
+  }
+};
+
+export const citizenDocuments = async (citizenId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/getCitizenDocuments/${citizenId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      //body: JSON.stringify(citizenData)
+    });
+
+    if (!response.ok) {
+      throw new Error('Error');
+    }
+
+    const documents = await response.json();
+    return documents;
   } catch (error) {
     throw new Error('Error al crear ciudadano');
   }

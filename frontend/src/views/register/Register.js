@@ -9,6 +9,7 @@ function Register() {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [operatorId, setOperatorId] = useState('');
 
   const handleRegisterClick = async () => {
@@ -18,6 +19,7 @@ function Register() {
         name: name,
         address: address,
         email: email,
+        password: password,
         operatorid: operatorId
       }
       const createdCitizen = await registerCitizen(citizenData);
@@ -27,6 +29,7 @@ function Register() {
       setName('')
       setAddress('')
       setEmail('')
+      setPassword('')
       setOperatorId('')
 
     } catch (error) {
@@ -50,6 +53,9 @@ function Register() {
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
         <TextField type="text" placeholder='email'  value={email} onChange={(event) => setEmail(event.target.value)}/>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+        <TextField type="password" placeholder='password'  value={password} onChange={(event) => setPassword(event.target.value)}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
         <TextField type="text" placeholder='Operator Id'  value={operatorId} onChange={(event) => setOperatorId(parseInt(event.target.value))}/>
