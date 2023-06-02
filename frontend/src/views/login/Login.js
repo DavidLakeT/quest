@@ -3,6 +3,7 @@ import AppBar from '../../components/appBar/Appbar';
 import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
 import { citizenLogin } from '../../services/citizenServices/CitizenServices';
+import { toast } from 'react-toastify';
 
 function Login() {
   const [id, setId] = useState('');
@@ -14,15 +15,21 @@ function Login() {
         citizenId: id,
         password: password
       }
+
       const login = await citizenLogin(citizenData);
       console.log('login', login);
 
       setId('')
       setPassword('')
 
+      toast.success('Succesfully logged in', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+
     } catch (error) {
       console.error('Error loging in', error.message);
-
     }
   }
 
@@ -34,7 +41,7 @@ function Login() {
         <TextField type="text" placeholder='Id'  value={id} onChange={(event) => setId(parseInt(event.target.value))}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-        <TextField type="password" placeholder='Password'  value={password} onChange={(event) => setId(event.target.value)}/>
+        <TextField type="password" placeholder='Password'  value={password} onChange={(event) => setPassword(event.target.value)}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
             <Button variant='contained' onClick={handleLoginClick}>Login</Button>

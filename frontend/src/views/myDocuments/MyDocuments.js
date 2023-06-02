@@ -2,12 +2,14 @@ import { Button, Grid, TextField } from '@mui/material';
 import AppBar from '../../components/appBar/Appbar';
 import React, { useState } from 'react';
 import { citizenDocuments } from '../../services/citizenServices/CitizenServices';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Documents() {
   const [id, setId] = useState('');
-  const [documents, setDocuments] = useState([]);
+  const [documents, setDocuments] = useState(null);
   const handleDocumentClick = async () => {
     try {
+      setDocuments(null);
       const documents = await citizenDocuments(id);
       console.log('Documents ', documents.message);
       setDocuments(documents.message)
@@ -16,7 +18,6 @@ function Documents() {
 
     } catch (error) {
       console.error('Error al crear ciudadano:', error.message);
-
     }
   };
 
@@ -31,18 +32,22 @@ function Documents() {
         <Button variant='contained' onClick={handleDocumentClick}>Search documents</Button>
         </Grid>
       </Grid>
-      <div>
-        <h2>Documents List:</h2>
-        <ul style={{ textAlign: 'center' }}>
-        {documents.map((document, index) => (
-          <li key={index}>
-            <a href={document.URL} target="_blank" rel="noopener noreferrer">
-              {document.Title}
-            </a>
-          </li>
-        ))}
-      </ul>
-      </div>
+        <div>
+          <h2 style={{marginTop: 90}}>Documents List:</h2>
+          {documents === null ? (
+            <p>No documents were found with that Citizen ID</p>
+          ) : (
+            <ul style={{ textAlign: 'center', listStyleType: 'none', padding: 0 }}>
+              {documents.map((document, index) => (
+                <li key={index} style={{ border: '1px solid black', borderRadius: '15px', padding: '15px', margin: '11px 680px 0 680px' }}>
+                  <a href={document.URL} target="_blank" rel="noopener noreferrer" style={{ color: 'black' }}>
+                    {document.Title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
     </AppBar>
   );
 }

@@ -41,8 +41,8 @@ func (dc *DocumentController) UploadDocument(ctx *gin.Context) {
 			return
 		}
 	*/
-	titleRegex := regexp.MustCompile(`^[a-zA-Z0-9_]+.[a-zA-Z0-9]+$`)
-	if !titleRegex.MatchString(strings.TrimSpace(request.DocumentTitle)) || len(strings.TrimSpace(request.DocumentTitle)) < 5 {
+
+	if len(strings.TrimSpace(request.DocumentTitle)) < 5 {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Document title length must be larger than 5"})
 		return
 	}

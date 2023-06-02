@@ -3,6 +3,7 @@ import AppBar from '../../components/appBar/Appbar';
 import { NavLink } from "react-router-dom";
 import { registerCitizen } from '../../services/citizenServices/CitizenServices';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 function Register() {
   const [id, setId] = useState('');
@@ -31,6 +32,12 @@ function Register() {
       setEmail('')
       setPassword('')
       setOperatorId('')
+
+      toast.success('Succesfully registered', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
 
     } catch (error) {
       console.error('Error al crear ciudadano:', error.message);

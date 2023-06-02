@@ -69,6 +69,7 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 		Email:      request.Email,
 		OperatorID: uint(request.OperatorID),
 		Documents:  []model.Document{},
+		Password:   request.Password,
 	}
 
 	err = cc.citizenService.RegisterCitizen(&citizen)
