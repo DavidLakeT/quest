@@ -4,11 +4,8 @@ export const registerCitizen = async (citizenData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/registerCitizen`, {
       method: 'POST',
-      mode: 'no-cors',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,GET,OPTIONS',
       },
       body: JSON.stringify(citizenData)
     });
@@ -28,11 +25,8 @@ export const transferCitizen = async (transferData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/transferCitizen`, {
       method: 'POST',
-      mode: 'no-cors',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,GET,OPTIONS',
       },
       body: JSON.stringify(transferData)
     });

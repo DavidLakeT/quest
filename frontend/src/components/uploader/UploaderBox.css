@@ -10,7 +10,15 @@ form{
     border-radius: 5px;
 }
 
-.uploaded-row{
+.uploadBox{
+    width: 100vw;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .uploaded-row{
     margin:10px 0;
     display: flex;
     justify-content: space-between;
