@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	controller "quest/controller/api"
 	"quest/repository"
@@ -58,9 +59,22 @@ func main() {
 
 	app := gin.Default()
 
+	app.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Content-Type")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+
+		c.Next()
+	})
+
 	routes.RegisterOperatorRoutes(app, operatorController)
 	routes.RegisterCitizenRoutes(app, citizenController)
-	routes.RegisterDocumentRoutes(app, documentController)
+	routes.RegisterDocumentRoutes(app, documentController, citizenController)
 
 	app.Run(":3000")
 }
