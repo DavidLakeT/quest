@@ -8,6 +8,9 @@ import (
 	"quest/repository"
 	"quest/routes"
 	"quest/service"
+	"time"
+
+	"github.com/gin-contrib/cors"
 
 	model "quest/model"
 
@@ -56,7 +59,16 @@ func main() {
 	documentService := service.NewDocumentService(documentRepository)
 	documentController := controller.NewDocumentController(documentService)
 
-	app := gin.New()
+	app := gin.Default()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"POST", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Content-Length", "Accept-Encoding", "Authorization", "Cache-Control"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	routes.RegisterOperatorRoutes(app, operatorController)
 	routes.RegisterCitizenRoutes(app, citizenController)
