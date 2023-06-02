@@ -54,3 +54,10 @@ if ! type "docker-compose" > /dev/null; then
 else
     echo 'docker-compose already installed'
 fi
+
+# Install NodeJS
+
+curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh
+${SUDO} bash nodesource_setup.sh
+${SUDO} apt-get install nodejs
+rm -f nodesource_setup.sh
