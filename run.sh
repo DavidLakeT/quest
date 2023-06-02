@@ -2,7 +2,7 @@
 
 # Script para ejecutar backend y frontend de Quest en paralelo
 
-cd .quest/app
+cd app
 go run . &
 
 cd ../frontend
