@@ -11,4 +11,5 @@ type Citizen struct {
 	Email      string
 	OperatorID uint
 	Documents  []Document
+	Password   string
 }

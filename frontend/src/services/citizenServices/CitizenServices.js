@@ -41,3 +41,24 @@ export const transferCitizen = async (transferData) => {
     throw new Error('Error al crear ciudadano');
   }
 };
+
+export const citizenLogin = async (citizenData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(citizenData)
+    });
+
+    if (!response.ok) {
+      throw new Error('Error');
+    }
+
+    const login = await response.json();
+    return login;
+  } catch (error) {
+    throw new Error('Error al crear ciudadano');
+  }
+};

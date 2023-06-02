@@ -20,8 +20,8 @@ func (ds *DocumentService) RegisterDocument(document *model.Document) error {
 	return ds.documentRepository.CreateDocument(document)
 }
 
-func (ds *DocumentService) GetDocument(citizenID uint, name string) (*model.Document, error) {
-	document, err := ds.documentRepository.GetDocumentByTitle(citizenID, name)
+func (ds *DocumentService) GetDocument(citizenID uint, title string) (*model.Document, error) {
+	document, err := ds.documentRepository.GetDocumentByTitle(citizenID, title)
 	if err != nil {
 		return nil, err
 	}
@@ -29,8 +29,8 @@ func (ds *DocumentService) GetDocument(citizenID uint, name string) (*model.Docu
 	return document, nil
 }
 
-func (ds *DocumentService) AuthenticateDocument(citizenID uint, name string) error {
-	document, err := ds.documentRepository.GetDocumentByTitle(citizenID, name)
+func (ds *DocumentService) AuthenticateDocument(citizenID uint, title string) error {
+	document, err := ds.documentRepository.GetDocumentByTitle(citizenID, title)
 	if err != nil {
 		return err
 	}
@@ -46,4 +46,22 @@ func (ds *DocumentService) AuthenticateDocument(citizenID uint, name string) err
 	}
 
 	return nil
+}
+
+func (ds *DocumentService) DeleteDocument(citizenID uint, title string) error {
+	document, err := ds.documentRepository.GetDocumentByTitle(citizenID, title)
+	if err != nil {
+		return err
+	}
+
+	err = ds.documentRepository.DeleteDocument(document)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ds *DocumentService) UpdateDocument(document *model.Document) error {
+	return ds.documentRepository.UpdateDocument(document)
 }

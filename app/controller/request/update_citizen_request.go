@@ -1,10 +1,9 @@
 package controller
 
-type RegisterCitizenRequest struct {
+type UpdateCitizenRequest struct {
 	CitizenID  uint   `json:"citizenId"`
 	Name       string `json:"name"`
 	Address    string `json:"address"`
 	Email      string `json:"email"`
-	Password   string `json:"password"`
 	OperatorID int    `json:"operatorId"`
 }

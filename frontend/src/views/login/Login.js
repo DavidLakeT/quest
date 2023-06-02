@@ -2,6 +2,7 @@ import { Button, Grid, TextField } from '@mui/material';
 import AppBar from '../../components/appBar/Appbar';
 import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
+import { citizenLogin } from '../../services/citizenServices/CitizenServices';
 
 function Login() {
   const [id, setId] = useState('');
@@ -13,14 +14,14 @@ function Login() {
         citizenId: id,
         password: password
       }
-      //const createdCitizen = await registerCitizen(citizenData);
-      //console.log('Ciudadano creado:', createdCitizen);
+      const login = await citizenLogin(citizenData);
+      console.log('login', login);
 
       setId('')
       setPassword('')
 
     } catch (error) {
-      console.error('Error al crear ciudadano:', error.message);
+      console.error('Error loging in', error.message);
 
     }
   }
@@ -36,7 +37,7 @@ function Login() {
         <TextField type="text" placeholder='Password'  value={password} onChange={(event) => setId(event.target.value)}/>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-            <Button variant='contained'>Login</Button>
+            <Button variant='contained' onClick={handleLoginClick}>Login</Button>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
                 <NavLink to="/register">
