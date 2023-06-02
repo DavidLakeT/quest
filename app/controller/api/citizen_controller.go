@@ -54,6 +54,13 @@ func (cc *CitizenController) RegisterCitizen(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid email format"})
 		return
 	}
+	/*
+		passwordRegex := regexp.MustCompile(`^(?=.*\d).{7,}$`)
+		if !passwordRegex.MatchString(request.Password) {
+			ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Invalid password format (+7 characters, 1 number)"})
+			return
+		}
+	*/
 
 	citizen := model.Citizen{
 		ID:         uint(request.CitizenID),
@@ -181,20 +188,24 @@ func (cc *CitizenController) LoginCitizen(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, map[string]interface{}{"error": err.Error()})
 		return
 	}
+
 	err, authorize := cc.citizenService.LoginCitizen(auth.CitizenID, auth.Password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, map[string]interface{}{"error": err.Error()})
 		return
 	}
+
 	if !authorize {
 		ctx.JSON(http.StatusUnauthorized, nil)
 		return
 	}
+
 	token, err := encryption.SignedLoginToken(auth.CitizenID)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, map[string]interface{}{"error": err.Error()})
 		return
 	}
+
 	ctx.SetCookie("auth", token, 90, "", "", false, false)
 	ctx.JSON(http.StatusAccepted, nil)
 }
@@ -206,11 +217,13 @@ func (cc *CitizenController) CheckAuth(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+
 	valid, err := encryption.CheckSignedToken(token)
 	if err != nil || !valid {
 		ctx.JSON(http.StatusUnauthorized, nil)
 		ctx.Abort()
 		return
 	}
+
 	ctx.Next()
 }

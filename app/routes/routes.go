@@ -21,7 +21,8 @@ func RegisterCitizenRoutes(ctx *gin.Engine, controller *controller.CitizenContro
 func RegisterDocumentRoutes(ctx *gin.Engine, controller *controller.DocumentController, citizenController *controller.CitizenController) {
 	apis := ctx.Group("/apis/document")
 
-	apis.POST("/uploadDocument", citizenController.CheckAuth, controller.UploadDocument)
+	//apis.POST("/uploadDocument", citizenController.CheckAuth, controller.UploadDocument)
+	apis.POST("/uploadDocument", controller.UploadDocument)
 	apis.PUT("/updateDocument", citizenController.CheckAuth, controller.UpdateDocument)
 	apis.PATCH("/authenticateDocument", controller.AuthenticateDocument)
 	apis.DELETE("/deleteDocument", citizenController.CheckAuth, controller.DeleteDocument)

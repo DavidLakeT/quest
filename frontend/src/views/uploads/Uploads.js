@@ -1,10 +1,14 @@
 import AppBar from '../../components/appBar/Appbar';
+import UploaderBox from '../../components/uploader/UploaderBox';
 
 function Uploads(){
     return (
-        <AppBar>
-            <h1>Uploads</h1>
-        </AppBar>
+    <div>
+        <AppBar/>
+        <div className='uploadBox'>
+            <UploaderBox />
+        </div>
+    </div>
     )
 }
 

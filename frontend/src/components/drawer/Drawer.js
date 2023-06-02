@@ -8,14 +8,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import { NavLink } from "react-router-dom";
-
 
 export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
@@ -67,6 +65,17 @@ export default function TemporaryDrawer() {
             <AssignmentTurnedInIcon/>
             </ListItemIcon>
             <ListItemText primary='Request document' />
+            </ListItemButton>
+          </NavLink>
+        </ListItem>
+        <Divider/>
+        <ListItem>
+          <NavLink to="/transfer" style={{textDecoration: 'none', color: "black"}}>
+            <ListItemButton>
+                <ListItemIcon>
+            <PublishedWithChangesIcon/>
+            </ListItemIcon>
+            <ListItemText primary='Transfer operator' />
             </ListItemButton>
           </NavLink>
         </ListItem>
